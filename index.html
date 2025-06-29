@@ -41,16 +41,31 @@
         .bg-fire{
             background-color: #FF3C00;
         }
+
+        .themedark{
+            background-color: black !important;
+            color: #ffffff !important;
+        }
+
+        .thememedium{
+            background-color: #a3a3a3 !important;
+            color: #dddddd !important;
+        }
+
+        .themelight{
+            background-color: #e0e0e0 !important;
+            color: #333333 !important;
+        }
     </style>
 </head>
 
-<body style="background-color: #121212;">
+<body class="themedark">
 
     <div class="container">
 
         <div class="row mb-5">
             <div class="col-12 text-center">
-                <button class="btn mb-3" onclick="changeTheme()">
+                <button class="btn mb-3 themedark" onclick="changeTheme()">
                     <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
                 </button>
             </div>
@@ -67,13 +82,13 @@
 
         <div class="row position-fixed bottom-0 w-100 my-4 ">
             <div class="col-12 text-center">
-                <button class="btn" onclick="resetTimer()">
+                <button class="btn themedark" onclick="resetTimer()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
                 </button>
-                <button class="btn mx-5" onclick="startAndPauseTimer()">
-                    <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw; color: #FF3C00;"></i>
+                <button class="btn mx-5 themedark" onclick="startAndPauseTimer()">
+                    <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw;"></i>
                 </button>
-                <button class="btn" onclick="addRecounter()">
+                <button class="btn themedark" onclick="addRecounter()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
                 </button>
             </div>
@@ -155,15 +170,20 @@
         }
 
         function changeTheme(){
+            let themes = ['themedark','thememedium','themelight']
             let body = document.getElementsByTagName('body')[0]
-            if (body.getAttribute('data-bs-theme') === 'dark'){
-                body.setAttribute('data-bs-theme', 'light');
-                document.getElementById('change-theme-icon').className = 'bi bi-moon-fill'
+            let indexBefore = themes.indexOf(body.className)
+            let index = indexBefore + 1
+            if (index >= themes.length) {
+                index = 0
+            };
 
-            } else {
-                body.setAttribute('data-bs-theme', 'dark');
-                document.getElementById('change-theme-icon').className = 'bi bi-brightness-high-fill'
+            body.className = themes[index]
+            for (const element of document.getElementsByTagName('button')) {
+                element.classList.remove(themes[indexBefore])
+                element.classList.add(themes[index])
             }
+            
         }
 
     </script>
