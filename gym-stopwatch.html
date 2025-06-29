@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym StopWatch</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .font-bebas {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: .75;
+        }
+
+        .bg-fire{
+            background-color: #FF3C00;
+        }
+    </style>
+</head>
+
+<body style="background-color: #121212;">
+
+    <div class="container">
+
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <button class="btn mb-3" onclick="changeTheme()">
+                    <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-center my-5">
+                <span class="font-bebas" style="font-size: 100dvw;" id="tempoMin">00</span>
+                <span class="font-bebas" style="font-size: 60dvw;" id="tempoSec">:00</span>
+        </div>
+
+        <div class="container" id="middleCounter">
+        </div>
+
+        <div class="row position-fixed bottom-0 w-100 my-4 ">
+            <div class="col-12 text-center">
+                <button class="btn" onclick="resetTimer()">
+                    <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
+                </button>
+                <button class="btn mx-5" onclick="startAndPauseTimer()">
+                    <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw; color: #FF3C00;"></i>
+                </button>
+                <button class="btn" onclick="addRecounter()">
+                    <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tempo = 0;
+        let intervalo;
+        let timerStatus = "paused";
+        let resetCounter = 0;
+
+        function startAndPauseTimer() {
+            if (timerStatus === "paused") {
+                timerStatus = "counting";
+                document.getElementById("pauseStartIcon").className = "bi bi-pause";
+                intervalo = setInterval(() => {
+                    tempo++;
+                    let minutos = Math.floor(tempo / 60);
+                    let segundos = tempo % 60;
+                    // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                    document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
+                    document.getElementById("tempoSec").textContent = `:${segundos.toString().padStart(2, '0')}`;
+                }, 1000);
+            } else if (timerStatus === "counting") {
+                timerStatus = "paused";
+                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+                clearInterval(intervalo);
+            }
+        }
+
+        function resetTimer() {
+            timerStatus = "paused";
+
+            document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+
+            resetCounter = 0;
+
+            let middleCounter = document.getElementById('middleCounter')
+            while (middleCounter.firstChild) {
+                middleCounter.removeChild(middleCounter.firstChild)
+            }
+
+            clearInterval(intervalo);
+
+            tempo = 0;
+
+            document.getElementById("tempoMin").textContent = "00";
+            document.getElementById("tempoSec").textContent = ":00";
+        }
+
+        function addRecounter() {
+            resetCounter++;
+
+            tempo = 0;
+
+            let middleCounter = document.getElementById('middleCounter')
+
+            let row = document.createElement('div')
+            row.className = 'row mb-1 fade-in'
+
+            let colNumber = document.createElement('div')
+            colNumber.className = 'col-3 offset-3 bg-fire'
+            colNumber.textContent = `${resetCounter}`
+
+            let colTime = document.createElement('div')
+            colTime.className = 'col-3 text-center font-bebas'
+            
+            colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
+
+            middleCounter.appendChild(row)
+            row.appendChild(colNumber)
+            row.appendChild(colTime)
+
+            timerStatus = "counting";
+            startAndPauseTimer()
+            document.getElementById("tempoMin").textContent = "00";
+            document.getElementById("tempoSec").textContent = ":00";
+        }
+
+        function changeTheme(){
+            let body = document.getElementsByTagName('body')[0]
+            if (body.getAttribute('data-bs-theme') === 'dark'){
+                body.setAttribute('data-bs-theme', 'light');
+                document.getElementById('change-theme-icon').className = 'bi bi-moon-fill'
+
+            } else {
+                body.setAttribute('data-bs-theme', 'dark');
+                document.getElementById('change-theme-icon').className = 'bi bi-brightness-high-fill'
+            }
+        }
+
+    </script>
+</body>
+
+</html>
