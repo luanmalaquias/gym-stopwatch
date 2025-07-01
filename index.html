@@ -35,6 +35,9 @@
             font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 2px;
             text-transform: uppercase;
+        }
+
+        .line-heigth-75{
             line-height: .75;
         }
 
@@ -63,18 +66,16 @@
 
     <div class="container">
 
-        <div class="row mb-5">
-            <div class="col-12 text-center">
-                <button class="btn mb-3 themedark" onclick="changeTheme()">
-                    <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
-                </button>
+        <div class="row">
+            <div class="col-12 text-end">
+                <h1 class="font-bebas pt-1" id="counter">00</h1>
             </div>
         </div>
 
         <div class="row">
             <div class="col-12 text-center my-5">
-                <span class="font-bebas" style="font-size: 100dvw;" id="tempoMin">00</span>
-                <span class="font-bebas" style="font-size: 60dvw;" id="tempoSec">:00</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 100dvw;" id="tempoMin">00</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 60dvw;" id="tempoSec">:00</span>
         </div>
 
         <div class="container" id="middleCounter">
@@ -90,6 +91,9 @@
                 </button>
                 <button class="btn themedark" style="background-color: #00000000 !important;" onclick="addRecounter()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
+                </button>
+                <button class="btn themedark" onclick="changeTheme()">
+                    <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
                 </button>
             </div>
         </div>
@@ -141,32 +145,37 @@
         }
 
         function addRecounter() {
-            resetCounter++;
+            let counter = parseInt(document.getElementById('counter').textContent)
+            counter++
+            document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
 
-            tempo = 0;
 
-            let middleCounter = document.getElementById('middleCounter')
+            // resetCounter++;
 
-            let row = document.createElement('div')
-            row.className = 'row mb-1 fade-in'
+            // tempo = 0;
 
-            let colNumber = document.createElement('div')
-            colNumber.className = 'col-3 offset-3 bg-fire'
-            colNumber.textContent = `${resetCounter}`
+            // let middleCounter = document.getElementById('middleCounter')
 
-            let colTime = document.createElement('div')
-            colTime.className = 'col-3 text-center font-bebas'
+            // let row = document.createElement('div')
+            // row.className = 'row mb-1 fade-in'
+
+            // let colNumber = document.createElement('div')
+            // colNumber.className = 'col-3 offset-3 bg-fire'
+            // colNumber.textContent = `${resetCounter}`
+
+            // let colTime = document.createElement('div')
+            // colTime.className = 'col-3 text-center font-bebas'
             
-            colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
+            // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
 
-            middleCounter.appendChild(row)
-            row.appendChild(colNumber)
-            row.appendChild(colTime)
+            // middleCounter.appendChild(row)
+            // row.appendChild(colNumber)
+            // row.appendChild(colTime)
 
-            timerStatus = "counting";
-            startAndPauseTimer()
-            document.getElementById("tempoMin").textContent = "00";
-            document.getElementById("tempoSec").textContent = ":00";
+            // timerStatus = "counting";
+            // startAndPauseTimer()
+            // document.getElementById("tempoMin").textContent = "00";
+            // document.getElementById("tempoSec").textContent = ":00";
         }
 
         function changeTheme(){
