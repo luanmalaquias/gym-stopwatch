@@ -37,25 +37,25 @@
             text-transform: uppercase;
         }
 
-        .line-heigth-75{
+        .line-heigth-75 {
             line-height: .75;
         }
 
-        .bg-fire{
+        .bg-fire {
             background-color: #FF3C00;
         }
 
-        .themedark{
+        .themedark {
             background-color: black !important;
             color: #ffffff !important;
         }
 
-        .thememedium{
+        .thememedium {
             background-color: #a3a3a3 !important;
             color: #dddddd !important;
         }
 
-        .themelight{
+        .themelight {
             background-color: #e0e0e0 !important;
             color: #333333 !important;
         }
@@ -67,18 +67,31 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-12 text-end">
-                <h1 class="font-bebas pt-1" id="counter">00</h1>
+            <dov class="col-12 d-flex justify-content-between">
+                <button class="btn themedark" onclick="changeTheme()">
+                    <i class="bi bi-brightness-high-fill d-flex float-left" id="change-theme-icon"></i>
+                </button>
+                <div>
+                    <button class="btn themedark fw-bold" onclick="changeFontSize('-')">
+                        <i class="bi bi-chevron-compact-left"></i>
+                    </button>
+                    <button class="btn themedark fw-bold" onclick="changeFontSize('+')">
+                        <i class="bi bi-chevron-compact-right"></i>
+                    </button>
+                </div>
+                <h1 class="font-bebas d-flex float-end" id="counter">00</h1>
+            </dov>
+        </div>
+
+        <hr>
+
+        <div class="row d-flex align-items-center mt-5">
+            <div class="col-12 text-center">
+                <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoMin">00</span>
+                <br>
+                <span class="font-bebas line-heigth-75" style="font-size: 40dvw;" id="tempoSec">.00</span>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12 text-center my-5">
-            <span class="font-bebas line-heigth-75" style="font-size: 100dvw;" id="tempoMin">00</span>
-            <span class="font-bebas line-heigth-75" style="font-size: 60dvw;" id="tempoSec">:00</span>
-        </div>
-
-        <div class="container" id="middleCounter">
+            
         </div>
 
         <div class="row position-fixed bottom-0 w-100 my-4 ">
@@ -86,118 +99,118 @@
                 <button class="btn themedark" style="background-color: #00000000 !important;" onclick="resetTimer()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
                 </button>
-                <button class="btn mx-5 themedark" style="background-color: #00000000 !important;" onclick="startAndPauseTimer()">
+                <button class="btn mx-5 themedark" style="background-color: #00000000 !important;"
+                    onclick="startAndPauseTimer()">
                     <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw;"></i>
                 </button>
                 <button class="btn themedark" style="background-color: #00000000 !important;" onclick="addRecounter()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
                 </button>
-                
-            </div>
-            <div class="col-12 text-center">
-                <button class="btn themedark" onclick="changeTheme()">
-                    <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
-                </button>
+
             </div>
         </div>
-    </div>
 
-    <script>
-        let tempo = 0;
-        let intervalo;
-        let timerStatus = "paused";
-        let resetCounter = 0;
+        <script>
+            let tempo = 0;
+            let intervalo;
+            let timerStatus = "paused";
+            let resetCounter = 0;
 
-        function startAndPauseTimer() {
-            if (timerStatus === "paused") {
-                timerStatus = "counting";
-                document.getElementById("pauseStartIcon").className = "bi bi-pause";
-                intervalo = setInterval(() => {
-                    tempo++;
-                    let minutos = Math.floor(tempo / 60);
-                    let segundos = tempo % 60;
-                    // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-                    document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
-                    document.getElementById("tempoSec").textContent = `:${segundos.toString().padStart(2, '0')}`;
-                }, 1000);
-            } else if (timerStatus === "counting") {
+            function startAndPauseTimer() {
+                if (timerStatus === "paused") {
+                    timerStatus = "counting";
+                    document.getElementById("pauseStartIcon").className = "bi bi-pause";
+                    intervalo = setInterval(() => {
+                        tempo++;
+                        let minutos = Math.floor(tempo / 60);
+                        let segundos = tempo % 60;
+                        // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                        document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
+                        document.getElementById("tempoSec").textContent = `.${segundos.toString().padStart(2, '0')}`;
+                    }, 1000);
+                } else if (timerStatus === "counting") {
+                    timerStatus = "paused";
+                    document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+                    clearInterval(intervalo);
+                }
+            }
+
+            function resetTimer() {
                 timerStatus = "paused";
+
                 document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+
+                resetCounter = 0;
+
                 clearInterval(intervalo);
-            }
-        }
 
-        function resetTimer() {
-            timerStatus = "paused";
+                tempo = 0;
 
-            document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-
-            resetCounter = 0;
-
-            let middleCounter = document.getElementById('middleCounter')
-            while (middleCounter.firstChild) {
-                middleCounter.removeChild(middleCounter.firstChild)
+                document.getElementById("counter").textContent = "00";
+                document.getElementById("tempoMin").textContent = "00";
+                document.getElementById("tempoSec").textContent = ".00";
             }
 
-            clearInterval(intervalo);
+            function addRecounter() {
+                let counter = parseInt(document.getElementById('counter').textContent)
+                counter++
+                document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
 
-            tempo = 0;
+                resetCounter++;
+                tempo = 0;
 
-            document.getElementById("counter").textContent = "00";
-            document.getElementById("tempoMin").textContent = "00";
-            document.getElementById("tempoSec").textContent = ":00";
-        }
+                let middleCounter = document.getElementById('middleCounter')
 
-        function addRecounter() {
-            let counter = parseInt(document.getElementById('counter').textContent)
-            counter++
-            document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
-            
-            resetCounter++;
-            tempo = 0;
+                let row = document.createElement('div')
+                row.className = 'row mb-1 fade-in'
 
-            let middleCounter = document.getElementById('middleCounter')
+                // let colNumber = document.createElement('div')
+                // colNumber.className = 'col-3 offset-3 bg-fire'
+                // colNumber.textContent = `${resetCounter}`
 
-            let row = document.createElement('div')
-            row.className = 'row mb-1 fade-in'
+                // let colTime = document.createElement('div')
+                // colTime.className = 'col-3 text-center font-bebas'
 
-            // let colNumber = document.createElement('div')
-            // colNumber.className = 'col-3 offset-3 bg-fire'
-            // colNumber.textContent = `${resetCounter}`
+                // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
 
-            // let colTime = document.createElement('div')
-            // colTime.className = 'col-3 text-center font-bebas'
-            
-            // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
+                // middleCounter.appendChild(row)
+                // row.appendChild(colNumber)
+                // row.appendChild(colTime)
 
-            // middleCounter.appendChild(row)
-            // row.appendChild(colNumber)
-            // row.appendChild(colTime)
-
-            timerStatus = "counting";
-            startAndPauseTimer()
-            document.getElementById("tempoMin").textContent = "00";
-            document.getElementById("tempoSec").textContent = ":00";
-        }
-
-        function changeTheme(){
-            let themes = ['themedark','thememedium','themelight']
-            let body = document.getElementsByTagName('body')[0]
-            let indexBefore = themes.indexOf(body.className)
-            let index = indexBefore + 1
-            if (index >= themes.length) {
-                index = 0
-            };
-
-            body.className = themes[index]
-            for (const element of document.getElementsByTagName('button')) {
-                element.classList.remove(themes[indexBefore])
-                element.classList.add(themes[index])
+                timerStatus = "counting";
+                startAndPauseTimer()
+                document.getElementById("tempoMin").textContent = "00";
+                document.getElementById("tempoSec").textContent = ".00";
             }
-            
-        }
 
-    </script>
+            function changeTheme() {
+                let themes = ['themedark', 'thememedium', 'themelight']
+                let body = document.getElementsByTagName('body')[0]
+                let indexBefore = themes.indexOf(body.className)
+                let index = indexBefore + 1
+                if (index >= themes.length) {
+                    index = 0
+                };
+
+                body.className = themes[index]
+                for (const element of document.getElementsByTagName('button')) {
+                    element.classList.remove(themes[indexBefore])
+                    element.classList.add(themes[index])
+                }
+
+            }
+
+            function changeFontSize(option) {
+                if (option == '+') {
+                    document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) + 10}dvw`
+                    document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) + 10}dvw`
+                } else if (option == '-') {
+                    document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) - 10}dvw`
+                    document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) - 10}dvw`
+                }
+            }
+
+        </script>
 </body>
 
 </html>
