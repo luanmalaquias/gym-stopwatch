@@ -126,7 +126,7 @@
                         let segundos = tempo % 60;
                         // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
                         document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
-                        document.getElementById("tempoSec").textContent = `.${segundos.toString().padStart(2, '0')}`;
+                        document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
                     }, 1000);
                 } else if (timerStatus === "counting") {
                     timerStatus = "paused";
