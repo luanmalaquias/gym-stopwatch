@@ -4,15 +4,16 @@ const arquivosParaCache = [
     "/",
     "/index.html",
     "/manifest.json",
+    "/service-worker.js",
 
     // JavaScript
     "/js/bootstrap.bundle.min.js",
-    "/js/service-worker.js",
     "/js/bootstrap.bundle.js",
 
     // CSS
     "/css/bootstrap.min.css",
     "/css/bootstrap.css",
+    "/css/themes.css",
 
     // Fontes
     "/fonts/BebasNeue-Regular.otf",

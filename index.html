@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
 
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/themes.css">
 
     <style>
         @font-face {
@@ -47,38 +48,23 @@
         .bg-fire {
             background-color: #FF3C00;
         }
-
-        .themedark {
-            background-color: black !important;
-            color: #ffffff !important;
-        }
-
-        .thememedium {
-            background-color: #a3a3a3 !important;
-            color: #dddddd !important;
-        }
-
-        .themelight {
-            background-color: #e0e0e0 !important;
-            color: #333333 !important;
-        }
     </style>
 </head>
 
-<body class="themedark">
+<body class="theme-dark">
 
     <div class="container-fluid" style="height: 100vh; width: 100vw;">
         <!-- nav -->
         <div class="row" style="height: 10%;">
             <div class="col-12 d-flex justify-content-between align-items-center">
-                <button class="btn themedark" onclick="changeTheme()">
+                <button class="btn theme-dark" onclick="changeTheme()">
                     <i class="bi bi-brightness-high-fill d-flex float-left" id="change-theme-icon"></i>
                 </button>
                 <div>
-                    <button class="btn themedark fw-bold" onclick="changeFontSize('-')">
+                    <button class="btn theme-dark fw-bold" onclick="changeFontSize('-')">
                         <i class="bi bi-chevron-compact-left"></i>
                     </button>
-                    <button class="btn themedark fw-bold" onclick="changeFontSize('+')">
+                    <button class="btn theme-dark fw-bold" onclick="changeFontSize('+')">
                         <i class="bi bi-chevron-compact-right"></i>
                     </button>
                 </div>
@@ -100,14 +86,14 @@
         <!-- footer -->
         <div class="row" style="height: 10%;">
             <div class="col-12 text-center">
-                <button class="btn themedark" style="background-color: #00000000 !important;" onclick="resetTimer()">
+                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="resetTimer()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
                 </button>
-                <button class="btn mx-5 themedark" style="background-color: #00000000 !important;"
+                <button class="btn mx-5 theme-dark" style="background-color: #00000000 !important;"
                     onclick="startAndPauseTimer()">
                     <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw;"></i>
                 </button>
-                <button class="btn themedark" style="background-color: #00000000 !important;" onclick="addRecounter()">
+                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="addRecounter()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
                 </button>
             </div>
@@ -188,7 +174,13 @@
         }
 
         function changeTheme() {
-            let themes = ['themedark', 'thememedium', 'themelight']
+            let themes = [
+                "theme-dark",
+                "theme-light",
+                "theme-solar",
+                "theme-ocean",
+                "theme-forest",
+            ]
             let body = document.getElementsByTagName('body')[0]
             let indexBefore = themes.indexOf(body.className)
             let index = indexBefore + 1
