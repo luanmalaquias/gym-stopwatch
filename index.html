@@ -67,10 +67,10 @@
 
 <body class="themedark">
 
-    <div class="container">
-
-        <div class="row">
-            <dov class="col-12 d-flex justify-content-between">
+    <div class="container-fluid" style="height: 100vh; width: 100vw;">
+        <!-- nav -->
+        <div class="row" style="height: 10%;">
+            <div class="col-12 d-flex justify-content-between align-items-center">
                 <button class="btn themedark" onclick="changeTheme()">
                     <i class="bi bi-brightness-high-fill d-flex float-left" id="change-theme-icon"></i>
                 </button>
@@ -82,22 +82,23 @@
                         <i class="bi bi-chevron-compact-right"></i>
                     </button>
                 </div>
-                <h1 class="font-bebas d-flex float-end" id="counter">00</h1>
-            </dov>
+                <h1 class="font-bebas px-2" id="counter">00</h1>
+            </div>
+            <hr>
         </div>
 
-        <hr>
 
-        <div class="row d-flex align-items-center mt-5">
-            <div class="col-12 text-center">
+        <!-- body -->
+        <div class="row d-flex align-items-center" style="height: 80%;">
+            <div class="col-12   text-center">
                 <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoMin">00</span>
                 <br>
                 <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoSec">00</span>
             </div>
-
         </div>
 
-        <div class="row position-fixed bottom-0 w-100 my-4 ">
+        <!-- footer -->
+        <div class="row" style="height: 10%;">
             <div class="col-12 text-center">
                 <button class="btn themedark" style="background-color: #00000000 !important;" onclick="resetTimer()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
@@ -109,7 +110,6 @@
                 <button class="btn themedark" style="background-color: #00000000 !important;" onclick="addRecounter()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
                 </button>
-
             </div>
         </div>
     </div>
