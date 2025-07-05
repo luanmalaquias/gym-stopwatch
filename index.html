@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+
     <style>
         @keyframes fadeIn {
             from {
@@ -91,7 +94,7 @@
                 <br>
                 <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoSec">00</span>
             </div>
-            
+
         </div>
 
         <div class="row position-fixed bottom-0 w-100 my-4 ">
@@ -109,108 +112,118 @@
 
             </div>
         </div>
+    </div>
 
-        <script>
-            let tempo = 0;
-            let intervalo;
-            let timerStatus = "paused";
-            let resetCounter = 0;
+    <script>
+        let tempo = 0;
+        let intervalo;
+        let timerStatus = "paused";
+        let resetCounter = 0;
 
-            function startAndPauseTimer() {
-                if (timerStatus === "paused") {
-                    timerStatus = "counting";
-                    document.getElementById("pauseStartIcon").className = "bi bi-pause";
-                    intervalo = setInterval(() => {
-                        tempo++;
-                        let minutos = Math.floor(tempo / 60);
-                        let segundos = tempo % 60;
-                        // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-                        document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
-                        document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
-                    }, 1000);
-                } else if (timerStatus === "counting") {
-                    timerStatus = "paused";
-                    document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-                    clearInterval(intervalo);
-                }
-            }
-
-            function resetTimer() {
-                timerStatus = "paused";
-
-                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-
-                resetCounter = 0;
-
-                clearInterval(intervalo);
-
-                tempo = 0;
-
-                document.getElementById("counter").textContent = "00";
-                document.getElementById("tempoMin").textContent = "00";
-                document.getElementById("tempoSec").textContent = "00";
-            }
-
-            function addRecounter() {
-                let counter = parseInt(document.getElementById('counter').textContent)
-                counter++
-                document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
-
-                resetCounter++;
-                tempo = 0;
-
-                let middleCounter = document.getElementById('middleCounter')
-
-                let row = document.createElement('div')
-                row.className = 'row mb-1 fade-in'
-
-                // let colNumber = document.createElement('div')
-                // colNumber.className = 'col-3 offset-3 bg-fire'
-                // colNumber.textContent = `${resetCounter}`
-
-                // let colTime = document.createElement('div')
-                // colTime.className = 'col-3 text-center font-bebas'
-
-                // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
-
-                // middleCounter.appendChild(row)
-                // row.appendChild(colNumber)
-                // row.appendChild(colTime)
-
+        function startAndPauseTimer() {
+            if (timerStatus === "paused") {
                 timerStatus = "counting";
-                startAndPauseTimer()
-                document.getElementById("tempoMin").textContent = "00";
-                document.getElementById("tempoSec").textContent = "00";
+                document.getElementById("pauseStartIcon").className = "bi bi-pause";
+                intervalo = setInterval(() => {
+                    tempo++;
+                    let minutos = Math.floor(tempo / 60);
+                    let segundos = tempo % 60;
+                    // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                    document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
+                    document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
+                }, 1000);
+            } else if (timerStatus === "counting") {
+                timerStatus = "paused";
+                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+                clearInterval(intervalo);
+            }
+        }
+
+        function resetTimer() {
+            timerStatus = "paused";
+
+            document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+
+            resetCounter = 0;
+
+            clearInterval(intervalo);
+
+            tempo = 0;
+
+            document.getElementById("counter").textContent = "00";
+            document.getElementById("tempoMin").textContent = "00";
+            document.getElementById("tempoSec").textContent = "00";
+        }
+
+        function addRecounter() {
+            let counter = parseInt(document.getElementById('counter').textContent)
+            counter++
+            document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
+
+            resetCounter++;
+            tempo = 0;
+
+            let middleCounter = document.getElementById('middleCounter')
+
+            let row = document.createElement('div')
+            row.className = 'row mb-1 fade-in'
+
+            // let colNumber = document.createElement('div')
+            // colNumber.className = 'col-3 offset-3 bg-fire'
+            // colNumber.textContent = `${resetCounter}`
+
+            // let colTime = document.createElement('div')
+            // colTime.className = 'col-3 text-center font-bebas'
+
+            // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
+
+            // middleCounter.appendChild(row)
+            // row.appendChild(colNumber)
+            // row.appendChild(colTime)
+
+            timerStatus = "counting";
+            startAndPauseTimer()
+            document.getElementById("tempoMin").textContent = "00";
+            document.getElementById("tempoSec").textContent = "00";
+        }
+
+        function changeTheme() {
+            let themes = ['themedark', 'thememedium', 'themelight']
+            let body = document.getElementsByTagName('body')[0]
+            let indexBefore = themes.indexOf(body.className)
+            let index = indexBefore + 1
+            if (index >= themes.length) {
+                index = 0
+            };
+
+            body.className = themes[index]
+            for (const element of document.getElementsByTagName('button')) {
+                element.classList.remove(themes[indexBefore])
+                element.classList.add(themes[index])
             }
 
-            function changeTheme() {
-                let themes = ['themedark', 'thememedium', 'themelight']
-                let body = document.getElementsByTagName('body')[0]
-                let indexBefore = themes.indexOf(body.className)
-                let index = indexBefore + 1
-                if (index >= themes.length) {
-                    index = 0
-                };
+        }
 
-                body.className = themes[index]
-                for (const element of document.getElementsByTagName('button')) {
-                    element.classList.remove(themes[indexBefore])
-                    element.classList.add(themes[index])
-                }
-
+        function changeFontSize(option) {
+            if (option == '+') {
+                document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) + 10}dvw`
+                document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) + 10}dvw`
+            } else if (option == '-') {
+                document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) - 10}dvw`
+                document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) - 10}dvw`
             }
+        }
 
-            function changeFontSize(option) {
-                if (option == '+') {
-                    document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) + 10}dvw`
-                    document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) + 10}dvw`
-                } else if (option == '-') {
-                    document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) - 10}dvw`
-                    document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) - 10}dvw`
-                }
-            }
+    </script>
 
-        </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker registrado"))
+                .catch((err) => console.log("Erro no SW:", err));
+        }
+    </script>
+
 </body>
 
 </html>
