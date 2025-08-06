@@ -8,6 +8,9 @@
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="js/bootstrap.bundle.js">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
 
     <link rel="manifest" href="manifest.json">
@@ -56,19 +59,30 @@
     <div class="container-fluid" style="height: 100vh; width: 100vw;">
         <!-- nav -->
         <div class="row" style="height: 10%;">
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <button class="btn theme-dark" onclick="changeTheme()">
-                    <i class="bi bi-brightness-high-fill d-flex float-left" id="change-theme-icon"></i>
-                </button>
-                <div>
-                    <button class="btn theme-dark fw-bold" onclick="changeFontSize('-')">
-                        <i class="bi bi-chevron-compact-left"></i>
-                    </button>
-                    <button class="btn theme-dark fw-bold" onclick="changeFontSize('+')">
-                        <i class="bi bi-chevron-compact-right"></i>
-                    </button>
-                </div>
+            <div class="col-12 text-end d-flex align-items-center justify-content-between">
+
                 <h1 class="font-bebas px-2" id="counter">00</h1>
+                <div class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-gear-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li class="d-flex justify-content-between align-items-center px-2">
+                            <button class="btn theme-dark w-50" onclick="changeFontSize('-')">
+                                Font-
+                            </button>
+                            <button class="btn theme-dark w-50" onclick="changeFontSize('+')">
+                                Font+
+                            </button>
+                        </li>
+                        <li class="px-2 pt-1">
+                            <button class="btn theme-dark w-100" onclick="changeTheme()">
+                                <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <hr>
         </div>
@@ -76,9 +90,9 @@
 
         <!-- body -->
         <div class="row d-flex align-items-center" style="height: 80%;">
-            <div class="col-12   text-center">
-                <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoMin">00</span>
-                <br>
+            <div class="col-12 text-center">
+                <!-- <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="counter">00</span>
+                <br> -->
                 <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoSec">00</span>
             </div>
         </div>
@@ -86,7 +100,7 @@
         <!-- footer -->
         <div class="row" style="height: 10%;">
             <div class="col-12 text-center">
-                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="resetTimer()">
+                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="resetAllData()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
                 </button>
                 <button class="btn mx-5 theme-dark" style="background-color: #00000000 !important;"
@@ -110,6 +124,31 @@
             if (timerStatus === "paused") {
                 timerStatus = "counting";
                 document.getElementById("pauseStartIcon").className = "bi bi-pause";
+                localStorage.setItem("lastTimeStarted", new Date())
+                intervalo = setInterval(() => {
+                    // atualizar a cada segundo com o tempo atual - o lasttime
+                    let savedTime = new Date(localStorage.getItem("lastTimeStarted"))
+                    let currentTime = new Date();
+                    let diferenceTime = Math.floor((currentTime - savedTime) / 1000);
+                    document.getElementById("tempoSec").textContent = `${diferenceTime.toString().padStart(2, '0')}`;
+
+                    //let minutos = Math.floor(tempo / 60);
+                    //let segundos = tempo % 60;
+                    //document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                    //document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
+                    //document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
+                }, 1000);
+            } else if (timerStatus === "counting") {
+                timerStatus = "paused";
+                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
+                clearInterval(intervalo);
+            }
+        }
+
+        function startAndPauseTimer1() {
+            if (timerStatus === "paused") {
+                timerStatus = "counting";
+                document.getElementById("pauseStartIcon").className = "bi bi-pause";
                 intervalo = setInterval(() => {
                     tempo++;
                     let minutos = Math.floor(tempo / 60);
@@ -125,7 +164,7 @@
             }
         }
 
-        function resetTimer() {
+        function resetAllData() {
             timerStatus = "paused";
 
             document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
@@ -137,8 +176,9 @@
             tempo = 0;
 
             document.getElementById("counter").textContent = "00";
-            document.getElementById("tempoMin").textContent = "00";
             document.getElementById("tempoSec").textContent = "00";
+
+            localStorage.setItem("seriesqtd", 0);
         }
 
         function addRecounter() {
@@ -169,8 +209,8 @@
 
             timerStatus = "counting";
             startAndPauseTimer()
-            document.getElementById("tempoMin").textContent = "00";
             document.getElementById("tempoSec").textContent = "00";
+            saveSeries(counter)
         }
 
         function changeTheme() {
@@ -198,23 +238,32 @@
 
         function changeFontSize(option) {
             if (option == '+') {
-                document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) + 10}dvw`
                 document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) + 10}dvw`
             } else if (option == '-') {
-                document.getElementById("tempoMin").style.fontSize = `${parseInt(document.getElementById("tempoMin").style.fontSize) - 10}dvw`
                 document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) - 10}dvw`
             }
         }
 
+        function saveSeries(counter) {
+            localStorage.setItem("seriesqtd", counter);
+        }
+
+        function loadSeries() {
+            series_bd = localStorage.getItem("seriesqtd");
+            document.getElementById("counter").textContent = series_bd < 10 ? `0${series_bd}` : series_bd
+        }
+
+        loadSeries()
+
     </script>
 
-    <script>
+    <!-- <script>
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("service-worker.js")
                 .then(() => console.log("Service Worker registrado"))
                 .catch((err) => console.error("Erro ao registrar SW", err));
         }
-    </script>
+    </script> -->
 
 </body>
 
