@@ -59,10 +59,10 @@
     <div class="container-fluid" style="height: 100vh; width: 100vw;">
         <!-- nav -->
         <div class="row" style="height: 10%;">
-            <div class="col-12 text-end d-flex align-items-center justify-content-between">
+            <div class="col-12 text-end mt-2">
 
-                <h1 class="font-bebas px-2" id="counter">00</h1>
-                <div class="dropdown">
+                <!-- <h1 class="font-bebas px-2" id="counter">00</h1> -->
+                <div class="dropdown" data-bs-theme="dark">
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi bi-gear-fill"></i>
@@ -81,6 +81,10 @@
                                 <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
                             </button>
                         </li>
+                        <li class="px-2 pt-1">
+                            <label for="">Tempo limite (segundos)</label>
+                            <input class="form-control" type="number" id="tempoLimite" onchange="localStorage.setItem('tempoLimite', this.value)">
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -91,9 +95,10 @@
         <!-- body -->
         <div class="row d-flex align-items-center" style="height: 80%;">
             <div class="col-12 text-center">
-                <!-- <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="counter">00</span>
-                <br> -->
+                <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" id="counter">00</span>
                 <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoSec">00</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" >:</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" id="tempoMiliSec">00</span>
             </div>
         </div>
 
@@ -119,6 +124,8 @@
         let intervalo;
         let timerStatus = "paused";
         let resetCounter = 0;
+        let notificationSended = false;
+        let tempoLimite = parseInt(localStorage.getItem('tempoLimite'))
 
         function startAndPauseTimer() {
             if (timerStatus === "paused") {
@@ -126,18 +133,24 @@
                 document.getElementById("pauseStartIcon").className = "bi bi-pause";
                 localStorage.setItem("lastTimeStarted", new Date())
                 intervalo = setInterval(() => {
-                    // atualizar a cada segundo com o tempo atual - o lasttime
                     let savedTime = new Date(localStorage.getItem("lastTimeStarted"))
                     let currentTime = new Date();
-                    let diferenceTime = Math.floor((currentTime - savedTime) / 1000);
-                    document.getElementById("tempoSec").textContent = `${diferenceTime.toString().padStart(2, '0')}`;
+                    let seconds = Math.floor((currentTime - savedTime) / 1000);
+                    let miliSeconds = Math.floor((currentTime - savedTime) / 10) % 100;
 
-                    //let minutos = Math.floor(tempo / 60);
-                    //let segundos = tempo % 60;
-                    //document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-                    //document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
-                    //document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
-                }, 1000);
+                    document.getElementById("tempoSec").textContent = `${seconds.toString().padStart(2, '0')}`;
+                    document.getElementById("tempoMiliSec").textContent = `${miliSeconds.toString().padStart(2, '0')}`;
+                    
+                    if (tempoLimite != null && tempoLimite > 0) {
+                        if (seconds >= tempoLimite) {
+                            if (!notificationSended) {
+                                notificationSended = true;
+                                enviarNotificacao("Gym Stopwatch", "Tempo limite atingido");
+                            }
+                        }
+                    }
+
+                }, 10);
             } else if (timerStatus === "counting") {
                 timerStatus = "paused";
                 document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
@@ -177,6 +190,7 @@
 
             document.getElementById("counter").textContent = "00";
             document.getElementById("tempoSec").textContent = "00";
+            document.getElementById("tempoMiliSec").textContent = "00";
 
             localStorage.setItem("seriesqtd", 0);
         }
@@ -186,30 +200,12 @@
             counter++
             document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
 
-            resetCounter++;
             tempo = 0;
 
-            let middleCounter = document.getElementById('middleCounter')
-
-            let row = document.createElement('div')
-            row.className = 'row mb-1 fade-in'
-
-            // let colNumber = document.createElement('div')
-            // colNumber.className = 'col-3 offset-3 bg-fire'
-            // colNumber.textContent = `${resetCounter}`
-
-            // let colTime = document.createElement('div')
-            // colTime.className = 'col-3 text-center font-bebas'
-
-            // colTime.textContent = `${document.getElementById('tempoMin').textContent}${document.getElementById('tempoSec').textContent}`
-
-            // middleCounter.appendChild(row)
-            // row.appendChild(colNumber)
-            // row.appendChild(colTime)
-
-            timerStatus = "counting";
+            timerStatus = "paused";
             startAndPauseTimer()
             document.getElementById("tempoSec").textContent = "00";
+            document.getElementById("tempoMiliSec").textContent = "00";
             saveSeries(counter)
         }
 
@@ -248,12 +244,37 @@
             localStorage.setItem("seriesqtd", counter);
         }
 
-        function loadSeries() {
-            series_bd = localStorage.getItem("seriesqtd");
-            document.getElementById("counter").textContent = series_bd < 10 ? `0${series_bd}` : series_bd
+        function loadAllData() {
+            let series_bd = localStorage.getItem("seriesqtd");
+            if (series_bd != null){
+                document.getElementById("counter").textContent = series_bd < 10 ? `0${series_bd}` : series_bd
+            }
+
+            let tempoLimite = localStorage.getItem('tempoLimite');
+            if (tempoLimite != null && tempoLimite > 0) {
+                document.getElementById('tempoLimite').value = tempoLimite;
+            } else {
+                document.getElementById('tempoLimite').value = '';
+            }
         }
 
-        loadSeries()
+        function notificationConfig(){
+            if (Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+        }
+
+        function enviarNotificacao(titulo, corpo) {
+            if (Notification.permission === "granted") {
+                new Notification(titulo, {
+                    body: corpo,
+                    //icon: "icone.png" // opcional
+                });
+            }
+        }
+
+        loadAllData()
+        notificationConfig()
 
     </script>
 
