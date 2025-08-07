@@ -178,7 +178,6 @@
         }
 
         function resetAllData() {
-            timerStatus = "conting";
             startAndPauseTimer()
             document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
 
@@ -200,10 +199,8 @@
             let counter = parseInt(document.getElementById('counter').textContent)
             counter++
             document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
-
             tempo = 0;
-
-            timerStatus = "paused";
+            timerStatus = "counting";
             startAndPauseTimer()
             document.getElementById("tempoSec").textContent = "00";
             document.getElementById("tempoMiliSec").textContent = "00";
