@@ -193,6 +193,7 @@
             document.getElementById("tempoMiliSec").textContent = "00";
 
             localStorage.setItem("seriesqtd", 0);
+            notificationSended = false;
         }
 
         function addRecounter() {
@@ -207,6 +208,7 @@
             document.getElementById("tempoSec").textContent = "00";
             document.getElementById("tempoMiliSec").textContent = "00";
             saveSeries(counter)
+            notificationSended = false;
         }
 
         function changeTheme() {
