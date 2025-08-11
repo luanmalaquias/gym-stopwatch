@@ -19,7 +19,6 @@ const arquivosParaCache = [
     "/fonts/BebasNeue-Regular.otf",
 
     // Ícones do app
-    "/icons/icon-192.png",
     "/icons/icon-512.png",
 
     // SVGs se forem usados diretamente
