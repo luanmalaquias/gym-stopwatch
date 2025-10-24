@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'Bebas Neue';
+    src: url('/fonts/BebasNeue-Regular.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.font-bebas {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.line-heigth-75 {
+    line-height: .75;
+}
+
+.bg-fire {
+    background-color: #FF3C00;
+}
+
+.dark-theme{
+    background-color: #212121 !important;
+    color: #d4d4d4 !important;
+}
+
+.border-active{
+    border: 5px solid rgb(251, 251, 251);
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+}
+
+.border-deactive{
+    border: 5px solid transparent;
+}

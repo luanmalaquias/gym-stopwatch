@@ -1,13 +1,14 @@
 {
-    "name": "Gym Stop Watch",
-    "short_name": "Gym Stop Watch",
-    "start_url": "index.html",
+    "name": "Gym Stopwatch",
+    "short_name": "Gym Stopwatch",
+    "description": "Gym Stopwatch",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#000000",
+    "theme_color": "#4A90E2",
     "icons": [
         {
-            "src": "icons/icon-512.png",
+            "src": "/icons/icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

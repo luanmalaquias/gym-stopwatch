@@ -5,289 +5,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym StopWatch</title>
-
-    <link rel="icon" type="image/png" href="icons/icon-512.png">
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="js/bootstrap.bundle.js">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
-
+    <link rel="icon" type="image/png" href="/icons/icon-512.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/scripts.js"></script>
+    <script src="/js/script-excercises.js"></script>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/themes.css">
-
-    <style>
-        @font-face {
-            font-family: 'Bebas Neue';
-            src: url('fonts/BebasNeue-Regular.otf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .font-bebas {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .line-heigth-75 {
-            line-height: .75;
-        }
-
-        .bg-fire {
-            background-color: #FF3C00;
-        }
-    </style>
 </head>
 
-<body class="theme-dark">
+<body data-bs-theme="dark">
 
     <div class="container-fluid" style="height: 100vh; width: 100vw;">
         <!-- nav -->
-        <div class="row" style="height: 10%;">
-            <div class="col-12 text-end mt-2">
-
-                <!-- <h1 class="font-bebas px-2" id="counter">00</h1> -->
-                <div class="dropdown" data-bs-theme="dark">
-                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+        <div class="fixed-top">
+            <div class="col-12 mt-2 d-flex justify-content-between ">
+                <a class="btn" href="/index.html">Gym Stopwatch</a>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-gear-fill"></i>
                     </button>
                     <ul class="dropdown-menu">
                         <li class="d-flex justify-content-between align-items-center px-2">
-                            <button class="btn theme-dark w-50" onclick="changeFontSize('-')">
+                            <button class="btn w-50" onclick="changeFontSize('-')">
                                 Font-
                             </button>
-                            <button class="btn theme-dark w-50" onclick="changeFontSize('+')">
+                            <button class="btn w-50" onclick="changeFontSize('+')">
                                 Font+
                             </button>
-                        </li>
-                        <li class="px-2 pt-1">
-                            <button class="btn theme-dark w-100" onclick="changeTheme()">
-                                <i class="bi bi-brightness-high-fill" id="change-theme-icon"></i>
-                            </button>
-                        </li>
-                        <li class="px-2 pt-1">
-                            <label for="">Tempo limite (segundos)</label>
-                            <input class="form-control" type="number" id="tempoLimite" onchange="localStorage.setItem('tempoLimite', this.value)">
                         </li>
                     </ul>
                 </div>
             </div>
-            <hr>
+            <hr class="mb-0">
+            <div id="links" class="d-flex justify-content-between">
+                <a class="btn border-active" href="/index.html">Home</a>
+                <a class="btn border-deactive" href="/templates/excercises.html">Excercises history</a>
+                <a class="btn border-deactive" href="/templates/data.html">Data</a>
+            </div>
         </div>
 
-
         <!-- body -->
-        <div class="row d-flex align-items-center" style="height: 80%;">
-            <div class="col-12 text-center">
+        <div class="row d-flex align-items-center align-content-center" style="height: 100%;">
+            <div class="col-12 text-center mb-5">
                 <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" id="counter">00</span>
-                <span class="font-bebas line-heigth-75" style="font-size: 50dvw;" id="tempoSec">00</span>
-                <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" >:</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 40dvw;" id="tempoSec">00</span>
+                <span class="font-bebas line-heigth-75" style="font-size: 15dvw;">:</span>
                 <span class="font-bebas line-heigth-75" style="font-size: 15dvw;" id="tempoMiliSec">00</span>
+            </div>
+            <div class="col-6 offset-3 p-0">
+                <div class="col-12">
+                    <input class="form-control" type="text" placeholder="Excercise" id="excerciseName"
+                        list="excercisesList" oninput="autoCompleteWeight(); saveSessionStorage()">
+                </div>
+                <datalist id="excercisesList"></datalist>
+                <label>Reps</label>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary"
+                        onclick="changeReps('-', document.getElementById('reps')); saveSessionStorage()">-</button>
+                    <input type="number" class="form-control" value="10" id="reps">
+                    <button class="btn btn-outline-secondary"
+                        onclick="changeReps('+', document.getElementById('reps')); saveSessionStorage()">+</button>
+                </div>
+                <label>Weight</label>
+                <div class="input-group mb-2">
+                    <button class="btn btn-outline-secondary"
+                        onclick="changeWeight('-', document.getElementById('weight')); saveSessionStorage()">-</button>
+                    <input type="number" class="form-control" id="weight" value="5">
+                    <button class="btn btn-outline-secondary"
+                        onclick="changeWeight('+', document.getElementById('weight')); saveSessionStorage()">+</button>
+                </div>
+                <div class="col-12 text-center">
+                    <button class="btn btn-outline-secondary w-50" style="background-color: #00000000 !important;"
+                        onclick="saveExcercise(
+                            document.getElementById('excerciseName').value, 
+                            document.getElementById('reps').value, 
+                            document.getElementById('weight').value, 
+                            document.getElementById('counter').textContent);
+                            saveSessionStorage()">
+                        Salvar
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- footer -->
-        <div class="row" style="height: 10%;">
+        <div class="row fixed-bottom" style="height: 10%;">
             <div class="col-12 text-center">
-                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="resetAllData()">
+                <button class="btn" style="background-color: #00000000 !important;" onclick="resetAllData(); cleanSessionStorage()">
                     <i class="bi bi-x-circle" style="font-size: 10dvw;"></i>
                 </button>
-                <button class="btn mx-5 theme-dark" style="background-color: #00000000 !important;"
-                    onclick="startAndPauseTimer()">
+                <button class="btn mx-5" style="background-color: #00000000 !important;" onclick="startAndPauseTimer(); saveSessionStorage()">
                     <i id="pauseStartIcon" class="bi bi-play-fill" style="font-size: 10vw;"></i>
                 </button>
-                <button class="btn theme-dark" style="background-color: #00000000 !important;" onclick="addRecounter()">
+                <button class="btn" style="background-color: #00000000 !important;" onclick="addRecounter(); saveSessionStorage()">
                     <i class="bi bi-arrow-counterclockwise" style="font-size: 10dvw;"></i>
                 </button>
             </div>
         </div>
     </div>
-
-    <script>
-        let tempo = 0;
-        let intervalo;
-        let timerStatus = "paused";
-        let resetCounter = 0;
-        let notificationSended = false;
-        let tempoLimite = parseInt(localStorage.getItem('tempoLimite'))
-
-        function startAndPauseTimer() {
-            if (timerStatus === "paused") {
-                timerStatus = "counting";
-                document.getElementById("pauseStartIcon").className = "bi bi-pause";
-                localStorage.setItem("lastTimeStarted", new Date())
-                intervalo = setInterval(() => {
-                    let savedTime = new Date(localStorage.getItem("lastTimeStarted"))
-                    let currentTime = new Date();
-                    let seconds = Math.floor((currentTime - savedTime) / 1000);
-                    let miliSeconds = Math.floor((currentTime - savedTime) / 10) % 100;
-
-                    document.getElementById("tempoSec").textContent = `${seconds.toString().padStart(2, '0')}`;
-                    document.getElementById("tempoMiliSec").textContent = `${miliSeconds.toString().padStart(2, '0')}`;
-                    
-                    if (tempoLimite != null && tempoLimite > 0) {
-                        if (seconds >= tempoLimite) {
-                            if (!notificationSended) {
-                                notificationSended = true;
-                                enviarNotificacao("Gym Stopwatch", "Tempo limite atingido");
-                            }
-                        }
-                    }
-
-                }, 10);
-            } else if (timerStatus === "counting") {
-                timerStatus = "paused";
-                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-                clearInterval(intervalo);
-            }
-        }
-
-        function startAndPauseTimer1() {
-            if (timerStatus === "paused") {
-                timerStatus = "counting";
-                document.getElementById("pauseStartIcon").className = "bi bi-pause";
-                intervalo = setInterval(() => {
-                    tempo++;
-                    let minutos = Math.floor(tempo / 60);
-                    let segundos = tempo % 60;
-                    // document.getElementById("tempo").textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-                    document.getElementById("tempoMin").textContent = `${minutos.toString().padStart(2, '0')}`;
-                    document.getElementById("tempoSec").textContent = `${segundos.toString().padStart(2, '0')}`;
-                }, 1000);
-            } else if (timerStatus === "counting") {
-                timerStatus = "paused";
-                document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-                clearInterval(intervalo);
-            }
-        }
-
-        function resetAllData() {
-            timerStatus = "counting";
-            startAndPauseTimer()
-            document.getElementById("pauseStartIcon").className = "bi bi-play-fill";
-
-            resetCounter = 0;
-
-            clearInterval(intervalo);
-
-            tempo = 0;
-
-            document.getElementById("counter").textContent = "00";
-            document.getElementById("tempoSec").textContent = "00";
-            document.getElementById("tempoMiliSec").textContent = "00";
-
-            localStorage.setItem("seriesqtd", 0);
-            notificationSended = false;
-        }
-
-        function addRecounter() {
-            let counter = parseInt(document.getElementById('counter').textContent)
-            counter++
-            document.getElementById('counter').textContent = counter < 10 ? `0${counter}` : counter
-            tempo = 0;
-            timerStatus = "counting";
-            startAndPauseTimer()
-            document.getElementById("tempoSec").textContent = "00";
-            document.getElementById("tempoMiliSec").textContent = "00";
-            saveSeries(counter)
-            notificationSended = false;
-        }
-
-        function changeTheme() {
-            let themes = [
-                "theme-dark",
-                "theme-light",
-                "theme-solar",
-                "theme-ocean",
-                "theme-forest",
-            ]
-            let body = document.getElementsByTagName('body')[0]
-            let indexBefore = themes.indexOf(body.className)
-            let index = indexBefore + 1
-            if (index >= themes.length) {
-                index = 0
-            };
-
-            body.className = themes[index]
-            for (const element of document.getElementsByTagName('button')) {
-                element.classList.remove(themes[indexBefore])
-                element.classList.add(themes[index])
-            }
-
-        }
-
-        function changeFontSize(option) {
-            if (option == '+') {
-                document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) + 10}dvw`
-            } else if (option == '-') {
-                document.getElementById("tempoSec").style.fontSize = `${parseInt(document.getElementById("tempoSec").style.fontSize) - 10}dvw`
-            }
-        }
-
-        function saveSeries(counter) {
-            localStorage.setItem("seriesqtd", counter);
-        }
-
-        function loadAllData() {
-            let series_bd = localStorage.getItem("seriesqtd");
-            if (series_bd != null){
-                document.getElementById("counter").textContent = series_bd < 10 ? `0${series_bd}` : series_bd
-            }
-
-            let tempoLimite = localStorage.getItem('tempoLimite');
-            if (tempoLimite != null && tempoLimite > 0) {
-                document.getElementById('tempoLimite').value = tempoLimite;
-            } else {
-                document.getElementById('tempoLimite').value = '';
-            }
-        }
-
-        function notificationConfig(){
-            if (Notification.permission === "default") {
-                Notification.requestPermission();
-            }
-        }
-
-        function enviarNotificacao(titulo, corpo) {
-            if (Notification.permission === "granted") {
-                new Notification(titulo, {
-                    body: corpo,
-                    //icon: "icone.png" // opcional
-                });
-            }
-        }
-
-        loadAllData()
-        notificationConfig()
-
-    </script>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js")
-                .then(() => console.log("Service Worker registrado"))
-                .catch((err) => console.error("Erro ao registrar SW", err));
-        }
-    </script>
-
 </body>
+
+<script>
+    loadAllData()
+    populateExcercisesList()
+    loadSessionStorage()
+</script>
+
+<script src="app.js"></script>
+<script src="service-worker.js"></script>
 
 </html>

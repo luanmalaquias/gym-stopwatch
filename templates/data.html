@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym StopWatch</title>
+    <link rel="icon" type="image/png" href="/icons/icon-512.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap-icons/bootstrap-icons.css">
+    <script src="/js/data-page.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body data-bs-theme="dark">
+
+    <div class="container-fluid">
+        <div class="fixed-top">
+            <div class="col-12 mt-2 d-flex justify-content-between ">
+                <a class="btn" href="/index.html">Gym Stopwatch</a>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li class="d-flex justify-content-between align-items-center px-2">
+                            <button class="btn w-50" onclick="changeFontSize('-')">
+                                Font-
+                            </button>
+                            <button class="btn w-50" onclick="changeFontSize('+')">
+                                Font+
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mb-0">
+            <div id="links" class="d-flex justify-content-between">
+                <a class="btn border-deactive" href="/index.html">Home</a>
+                <a class="btn border-deactive" href="/templates/excercises.html">Excercises history</a>
+                <a class="btn border-active" href="/templates/data.html">Data</a>
+            </div>
+        </div>
+
+        <div style="height: 15vh"></div>
+
+        <!-- body -->
+        <div class="text-end">
+            <textarea id="dataElement" class="form-control mb-3" rows="15"></textarea>
+            <button class="btn btn-outline-secondary" onclick="saveData()">Save</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    loadData()
+</script>
+
+</html>
