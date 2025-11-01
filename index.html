@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="/css/themes.css">
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/scripts.js"></script>
-    <script src="/js/script-excercises.js"></script>
+    <script src="/js/excercises-page.js"></script>
+    <script src="/js/Excercise.js"></script>
     <link rel="manifest" href="manifest.json">
 </head>
 
 <body data-bs-theme="dark">
 
-    <div class="container-fluid" style="height: 100vh; width: 100vw;">
+    <div class="container-fluid">
         <!-- nav -->
         <div class="fixed-top">
             <div class="col-12 mt-2 d-flex justify-content-between ">
@@ -79,12 +80,7 @@
                 </div>
                 <div class="col-12 text-center">
                     <button class="btn btn-outline-secondary w-50" style="background-color: #00000000 !important;"
-                        onclick="saveExcercise(
-                            document.getElementById('excerciseName').value, 
-                            document.getElementById('reps').value, 
-                            document.getElementById('weight').value, 
-                            document.getElementById('counter').textContent);
-                            saveSessionStorage()">
+                        onclick="saveExcercise()">
                         Salvar
                     </button>
                 </div>
@@ -109,6 +105,7 @@
 </body>
 
 <script>
+    Excercise.loadDataBaseExcercises()
     loadAllData()
     populateExcercisesList()
     loadSessionStorage()

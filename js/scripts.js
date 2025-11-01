@@ -121,62 +121,22 @@ function loadAllData() {
 }
 
 function populateExcercisesList() {
-    let excercisesListElement = document.getElementById('excercisesList')
-    let excercisesList = localStorage.getItem("excercisesList")
-    if (excercisesList != null) {
-        let excercisesListJson = JSON.parse(excercisesList)
-        for (const key in excercisesListJson) {
-            for (const element of excercisesListJson[key]) {
-                let option = document.createElement('option')
-                option.value = element['eN']
-                excercisesListElement.appendChild(option)
-            }
-        }
+    let excercisesNames = Excercise.getAllExcercisesNames()
+    let excercisesList_element = document.getElementById('excercisesList')
+    for (const name of excercisesNames) {
+        let option = document.createElement('option')
+        option.value = name
+        excercisesList_element.appendChild(option)
     }
 }
 
 function autoCompleteWeight() {
-    let excercisesList = localStorage.getItem("excercisesList")
     let excerciseNameElement = document.getElementById("excerciseName")
     let weight = document.getElementById("weight")
-    if (excercisesList != null) {
-        let excercisesListJson = JSON.parse(excercisesList)
-        //let excercisesListJsonOrdenado = otherWise(excercisesListJson)
+    let excercise = Excercise.getExcerciseByName(excerciseNameElement.value)
+    if (excercise != null)
+        weight.value = excercise.weight
 
-        for (const key in excercisesListJson) {
-            for (const element in excercisesListJson[key]) {
-                if (excercisesListJson[key][element]["eN"] == excerciseNameElement.value) {
-                    weight.value = excercisesListJson[key][element]["wgt"]
-                }
-            }
-        }
-    }
-}
-
-function otherWise(list) {
-    const chaves = Object.keys(list);
-    chaves.sort((a, b) => {
-        const converterData = (dataStr) => {
-            const [dia, mes, ano] = dataStr.split('/');
-            return new Date(`${ano}-${mes}-${dia}`); // Cria um objeto Date
-        };
-
-        const dataA = converterData(a);
-        const dataB = converterData(b);
-
-        if (dataA < dataB) {
-            return 1; // Coloca B antes de A
-        }
-        if (dataA > dataB) {
-            return -1; // Coloca A antes de B
-        }
-        return 0;
-    });
-    const listOrdenated = {};
-    chaves.forEach(chave => {
-        listOrdenated[chave] = list[chave];
-    });
-    return listOrdenated
 }
 
 function saveSessionStorage() {
@@ -212,4 +172,38 @@ function loadSessionStorage() {
 
 function cleanSessionStorage() {
     sessionStorage.clear()
+}
+
+function changeReps(operation, element) {
+    if (operation == '+') {
+        element.value++
+    } else if (operation == '-') {
+        element.value--
+        if (element.value <= 0) {
+            element.value = 0
+        }
+    }
+}
+
+function changeWeight(operation, element) {
+    if (operation == '+') {
+        element.value = parseInt(element.value) + 5
+    } else if (operation == '-') {
+        element.value = parseInt(element.value) - 5
+        if (element.value <= 0) {
+            element.value = 0
+        }
+    }
+}
+
+function saveExcercise() {
+    let excercise = new Excercise(
+        document.getElementById("excerciseName").value,
+        document.getElementById("weight").value,
+        document.getElementById("counter").textContent,
+        document.getElementById("reps").value,
+    )
+    excercise.saveExcercise()
+    alert("Salvo")
+    resetAllData()
 }

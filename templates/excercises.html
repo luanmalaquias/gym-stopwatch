@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/bootstrap-icons/bootstrap-icons.css">
-    <script src="/js/script-excercises.js"></script>
+    <script src="/js/excercises-page.js"></script>
+    <script src="/js/Excercise.js"></script>
     <link rel="stylesheet" href="/css/style.css">
 
     <style>
-        .fundo1{
+        .fundo1 {
             background-color: #131517;
             box-shadow: #101010 5px 5px 10px;
         }
@@ -57,6 +58,9 @@
     </div>
 </body>
 
-<script>loadExcercises()</script>
+<script>
+    Excercise.loadDataBaseExcercises()
+    loadExcercises()
+</script>
 
 </html>

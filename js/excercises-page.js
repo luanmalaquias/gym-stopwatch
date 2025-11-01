@@ -1,61 +1,12 @@
-function changeReps(operation, element) {
-    if (operation == '+') {
-        element.value++
-    } else if (operation == '-') {
-        element.value--
-        if (element.value <= 0) {
-            element.value = 0
-        }
-    }
-}
-
-function changeWeight(operation, element) {
-    if (operation == '+') {
-        element.value = parseInt(element.value) + 5
-    } else if (operation == '-') {
-        element.value = parseInt(element.value) - 5
-        if (element.value <= 0) {
-            element.value = 0
-        }
-    }
-}
-
-function saveExcercise(excerciseName, reps, weigth, series) {
-    let excercisesList = localStorage.getItem("excercisesList")
-    const today = new Date();
-    const day = today.getDate().toString().padStart(2, '0');
-    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Janeiro = 0
-    const year = today.getFullYear();
-    let dateToday = `${day}/${month}/${year}`;
-    let excercisesListJson = JSON.parse(excercisesList)
-    if (excercisesListJson == null || Object.keys(excercisesListJson).length == 0) {
-        let currentExcercise = { [dateToday]: [{ "eN": excerciseName, "rp": reps, "wgt": weigth, "srs": series }] }
-        let currentExcerciseToString = JSON.stringify(currentExcercise);
-        localStorage.setItem("excercisesList", currentExcerciseToString);
-    } else {
-        let currentExcercise = { "eN": excerciseName, "rp": reps, "wgt": weigth, "srs": series }
-        if (excercisesListJson[dateToday]) {
-            excercisesListJson[dateToday].push(currentExcercise)
-        } else {
-            excercisesListJson[dateToday] = [currentExcercise]
-        }
-        let excercisesListToString = JSON.stringify(excercisesListJson);
-        localStorage.setItem("excercisesList", excercisesListToString);
-    }
-    window.alert("Excercício salvo")
-}
-
 function loadExcercises() {
     cleanExcercisesElement()
     let excercisesList = localStorage.getItem("excercisesList")
     let excercisesElement = document.getElementById("excercises")
-    if (excercisesList != null) {
-        let excercisesListJson = JSON.parse(excercisesList)
-        let excercisesListJsonInverted = invertList(excercisesListJson)
-        for (const key in excercisesListJsonInverted) {
-            let finalElement = createExcerciseElement(excercisesListJsonInverted, key, excercisesListJsonInverted[key])
-            excercisesElement.appendChild(finalElement)
-        }
+    let excerciseListInverted = Excercise.invertList(Excercise.excercises)
+    
+    for (const key in excerciseListInverted) {
+        let finalElement = createExcerciseElement(excerciseListInverted, key, excerciseListInverted[key])
+        excercisesElement.appendChild(finalElement)
     }
 
     return null
@@ -88,13 +39,13 @@ function createExcerciseElement(excercisesListJson, key, data) {
     divDate.appendChild(buttonDeleteDay)
     finalElement.appendChild(divDate)
 
-    for (const item of data) {
+    for (const excercise of data) {
         // Excercise Name Div
         let divExcerciseName = document.createElement('div')
         divExcerciseName.className = 'd-flex justify-content-between mb-1 align-items-center'
 
         let spanExcerciseName = document.createElement('span')
-        spanExcerciseName.textContent = `> ${item['eN']}`
+        spanExcerciseName.textContent = `> ${excercise.name}`
 
         let iTrash = document.createElement('i')
         iTrash.className = 'bi bi-trash'
@@ -102,7 +53,7 @@ function createExcerciseElement(excercisesListJson, key, data) {
         let buttonDeleteItem = document.createElement('button')
         buttonDeleteItem.className = 'btn btn-sm btn-danger'
         buttonDeleteItem.appendChild(iTrash)
-        buttonDeleteItem.onclick = () => deleteExcercise(excercisesListJson, key, item)
+        buttonDeleteItem.onclick = () => deleteExcercise(excercisesListJson, key, excercise)
 
         divExcerciseName.appendChild(spanExcerciseName)
         divExcerciseName.appendChild(buttonDeleteItem)
@@ -117,9 +68,9 @@ function createExcerciseElement(excercisesListJson, key, data) {
         let spanReps = document.createElement('span')
         let spanRightSpacing = document.createElement('span')
 
-        spanWeight.textContent = `${item['wgt']} kg`
-        spanSeries.textContent = `${parseInt(item['srs'])} series`
-        spanReps.textContent = `${item['rp']} reps`
+        spanWeight.textContent = `${excercise.weight} kg`
+        spanSeries.textContent = `${parseInt(excercise.series)} series`
+        spanReps.textContent = `${excercise.reps} reps`
 
         divExcerciseData.appendChild(spanLeftSpacing)
         divExcerciseData.appendChild(spanWeight)
@@ -135,21 +86,17 @@ function createExcerciseElement(excercisesListJson, key, data) {
 }
 
 function deleteDay(excercisesListJson, key) {
-    delete excercisesListJson[key]
-    excercisesListJsonInverted = invertList(excercisesListJson)
-    let excercisesListToString = JSON.stringify(excercisesListJsonInverted);
-    localStorage.setItem("excercisesList", excercisesListToString);
+    delete Excercise.excercises[key]
+    Excercise.dataBaseSaveExcercise()
     loadExcercises()
 }
 
 function deleteExcercise(excercisesListJson, key, item) {
-    const index = excercisesListJson[key].indexOf(item);
+    const index = Excercise.excercises[key].indexOf(item);
     if (index > -1) {
-        excercisesListJson[key].splice(index, 1);
+        Excercise.excercises[key].splice(index, 1);
     }
-    excercisesListJsonInverted = invertList(excercisesListJson)
-    let excercisesListToString = JSON.stringify(excercisesListJsonInverted);
-    localStorage.setItem("excercisesList", excercisesListToString);
+    Excercise.dataBaseSaveExcercise()
     loadExcercises()
 }
 
@@ -158,16 +105,6 @@ function cleanExcercisesElement() {
     while (excercisesElement.hasChildNodes()) {
         excercisesElement.removeChild(excercisesElement.firstChild)
     }
-}
-
-function invertList(list){
-    const chaves = Object.keys(list);
-    chaves.reverse();
-    const dadosInvertidos = {};
-    chaves.forEach(chave => {
-        dadosInvertidos[chave] = list[chave];
-    });
-    return dadosInvertidos;
 }
 
 function formatarDataComDiaSemana(dataString) {
